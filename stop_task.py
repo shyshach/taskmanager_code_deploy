@@ -4,6 +4,8 @@ import boto3
 
 def stop_task(event, context):
     body = event["body"]
+    print(str(body))
+
     body = json.loads(body)
     task_id = body["task_id"]
     dynamodb = boto3.resource('dynamodb')
@@ -13,7 +15,7 @@ def stop_task(event, context):
         table.update_item(Key={'task_id': task_id},
                           UpdateExpression="SET #status = :g",
                           ExpressionAttributeValues={
-                            ':g': "cancelled"
+                            ':g': -1
                         }, ExpressionAttributeNames={
                                 "#status": "status"
                         })

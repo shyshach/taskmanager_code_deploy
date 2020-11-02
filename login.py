@@ -15,11 +15,12 @@ def login(event, context):
             'statusCode': 400,
             'body': "Invalid username"
         }
-    if username == item.get("username") and password == item.get("password"):
+
+    if username == item.get("username"):
         return {
             'statusCode': 200,
-            'body': item["username"]
-            }
+            'body': item["password"]
+        }
     else:
         return {
             'statusCode': 400,

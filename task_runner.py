@@ -4,20 +4,21 @@ import time
 
 
 def run_task(event, context):
-    body = event["body"]
-    body = json.loads(body)
+    body = event
+    # body = json.loads(body)
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table('tasks')
     task_id = body.get("task_id")
     duration = body.get("duration")
+    print(body)
     for i in range(int(duration)):
-        if not table.get_item(Key={'task_id': task_id}).get("Item").get("status") == "cancelled":
+        if not table.get_item(Key={'task_id': task_id}).get("Item").get("status") == -1:
             table.update_item(Key={'task_id': task_id},
                               UpdateExpression="SET #status = :g",
                               ExpressionAttributeValues={
-                                  ':g': i+1
+                                  ':g': i + 1
                               }, ExpressionAttributeNames={
-                                "#status": "status"
+                    "#status": "status"
                 })
             time.sleep(1)
         else:
@@ -27,7 +28,7 @@ def run_task(event, context):
 
             }
     return {
-                'statusCode': 200,
-                'body': task_id
+        'statusCode': 200,
+        'body': task_id
 
-            }
+    }
